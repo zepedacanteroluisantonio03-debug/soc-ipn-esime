@@ -52,7 +52,7 @@
             padding: 15px; border-radius: 4px; font-size: 13px; line-height: 1.6;
             color: #475569; margin-bottom: 15px; flex-grow: 1; max-height: 450px; overflow-y: auto;
         }
-        .history-box { max-height: 380px; overflow-y: auto; padding-right: 5px; }
+        .history-box { max-height: 330px; overflow-y: auto; padding-right: 5px; }
         .action-btn {
             display: flex; align-items: center; justify-content: center; gap: 8px;
             background-color: var(--ipn-guinda); color: white; text-decoration: none;
@@ -93,7 +93,7 @@
             <div class="section-title">Evaluacion de Amenazas</div>
             <p class="desc-text">Interpretacion gerencial generada automaticamente por el modelo de lenguaje basada en el comportamiento mensual.</p>
             <div class="prediction-box">
-                <strong>Fecha de Analisis: 20/09/2026 21:13</strong><br><br>• Analisis predictivo generado correctamente mediante Prophet y Groq IA.
+                <strong>Fecha de Analisis: 20/09/2026 21:35</strong><br><br>• Analisis predictivo generado correctamente mediante Prophet y Groq IA.
             </div>
             <a href="estrategico/Boletin_Predictivo_Ejecutivo.pdf" target="_blank" class="action-btn">
                 Descargar Boletin Ejecutivo Completo
@@ -104,6 +104,14 @@
             <div class="card-header">Repositorio Tactico</div>
             <div class="section-title">Boletines por CVE</div>
             <p class="desc-text">Historial de reportes operativos de vulnerabilidades activas.</p>
+            
+            <!-- Aqui se inyecta el aviso visual del reporte mas antiguo -->
+            
+    <div style="background-color: #E2E8F0; padding: 8px; border-radius: 4px; font-size: 11px; text-align: center; font-weight: 600; color: #334155; margin-bottom: 12px; border: 1px solid #CBD5E1;">
+        Registro historico mas antiguo: CVE-2008-0015
+    </div>
+    
+            
             <div class="history-box">
                 
                 <a href="tacticos/Boletin_CVE_2026_9586.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
