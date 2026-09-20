@@ -1,1052 +1,1055 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOC IPN / ESIME | CTI & Threat Intelligence</title>
-    <style>
-        :root {
-            --ipn-guinda: #7B113A; --ipn-guinda-dark: #5a0c2a;
-            --soc-blue: #0A192F; --soc-blue-light: #172A45;
-            --accent-cyan: #64FFDA; --bg-canvas: #F4F6F9;
-            --card-bg: #FFFFFF; --text-main: #333333; --text-muted: #666666;
-        }
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            margin: 0; padding: 0; background-color: var(--bg-canvas); color: var(--text-main);
-        }
-        .navbar {
-            background-color: var(--soc-blue); color: white;
-            padding: 18px 40px; display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 4px solid var(--ipn-guinda); box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        .navbar-brand h1 { margin: 0; font-size: 22px; letter-spacing: 1.2px; font-weight: 700; }
-        .navbar-brand span { font-size: 13px; color: #8892B0; letter-spacing: 0.5px; }
-        .navbar-badge {
-            background-color: rgba(100, 255, 218, 0.1); color: var(--accent-cyan);
-            border: 1px solid var(--accent-cyan); padding: 6px 12px; border-radius: 20px;
-            font-size: 12px; font-weight: 600;
-        }
-        .container {
-            max-width: 1550px; margin: 30px auto; padding: 0 20px;
-            display: grid; grid-template-columns: 2fr 1.2fr 1fr; gap: 25px;
-        }
-        .card {
-            background: var(--card-bg); border-radius: 10px; padding: 22px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid #E2E8F0;
-            display: flex; flex-direction: column;
-        }
-        .card-header {
-            font-size: 16px; font-weight: 700; color: var(--soc-blue);
-            margin-bottom: 15px; border-bottom: 2px solid #F0F4F8; padding-bottom: 10px;
-            display: flex; align-items: center; gap: 8px;
-        }
-        .section-title {
-            font-size: 13px; font-weight: 700; color: var(--ipn-guinda);
-            margin: 20px 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px;
-        }
-        .dashboard-container { background: #fff; border-radius: 6px; overflow: hidden; border: 1px solid #CBD5E1; }
-        .dashboard-img { width: 100%; height: auto; display: block; }
-        .prediction-box {
-            background-color: #F8FAFC; border-left: 4px solid var(--soc-blue);
-            padding: 15px; border-radius: 4px; font-size: 13px; line-height: 1.6;
-            color: #475569; margin-bottom: 15px; flex-grow: 1; max-height: 450px; overflow-y: auto;
-        }
-        .history-box { max-height: 330px; overflow-y: auto; padding-right: 5px; }
-        .action-btn {
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            background-color: var(--ipn-guinda); color: white; text-decoration: none;
-            padding: 10px 12px; border-radius: 6px; margin-bottom: 10px; font-weight: 600; font-size: 12px;
-            transition: all 0.2s ease-in-out; box-shadow: 0 2px 5px rgba(123, 17, 58, 0.2);
-        }
-        .action-btn:hover { background-color: var(--ipn-guinda-dark); transform: translateY(-1px); }
-        .action-btn.secondary { background-color: var(--soc-blue); box-shadow: 0 2px 5px rgba(10, 25, 47, 0.2); }
-        .action-btn.secondary:hover { background-color: #132744; }
-        .desc-text { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4; }
-        .sys-info {
-            margin-top: auto; padding-top: 15px; border-top: 1px dashed #CBD5E1;
-            font-size: 11px; color: #888; text-align: center; line-height: 1.4;
-        }
-        @media (max-width: 1200px) { .container { grid-template-columns: 1fr; } }
-    </style>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>SOC IPN / ESIME | CTI & Threat Intelligence</title>
+   <style>
+       :root {
+           --ipn-guinda: #7B113A; --ipn-guinda-dark: #5a0c2a;
+           --soc-blue: #0A192F; --soc-blue-light: #172A45;
+           --accent-cyan: #64FFDA; --bg-canvas: #F4F6F9;
+           --card-bg: #FFFFFF; --text-main: #333333; --text-muted: #666666;
+       }
+       body {
+           font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+           margin: 0; padding: 0; background-color: var(--bg-canvas); color: var(--text-main);
+       }
+       .navbar {
+           background-color: var(--soc-blue); color: white;
+           padding: 18px 40px; display: flex; justify-content: space-between; align-items: center;
+           border-bottom: 4px solid var(--ipn-guinda); box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+       }
+       .navbar-brand h1 { margin: 0; font-size: 22px; letter-spacing: 1.2px; font-weight: 700; }
+       .navbar-brand span { font-size: 13px; color: #8892B0; letter-spacing: 0.5px; }
+       .navbar-badge {
+           background-color: rgba(100, 255, 218, 0.1); color: var(--accent-cyan);
+           border: 1px solid var(--accent-cyan); padding: 6px 12px; border-radius: 20px;
+           font-size: 12px; font-weight: 600;
+       }
+       .container {
+           max-width: 1550px; margin: 30px auto; padding: 0 20px;
+           display: grid; grid-template-columns: 2fr 1.2fr 1fr; gap: 25px;
+       }
+       .card {
+           background: var(--card-bg); border-radius: 10px; padding: 22px;
+           box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid #E2E8F0;
+           display: flex; flex-direction: column;
+       }
+       .card-header {
+           font-size: 16px; font-weight: 700; color: var(--soc-blue);
+           margin-bottom: 15px; border-bottom: 2px solid #F0F4F8; padding-bottom: 10px;
+           display: flex; align-items: center; gap: 8px;
+       }
+       .section-title {
+           font-size: 13px; font-weight: 700; color: var(--ipn-guinda);
+           margin: 20px 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px;
+       }
+       .dashboard-container { background: #fff; border-radius: 6px; overflow: hidden; border: 1px solid #CBD5E1; }
+       .dashboard-img { width: 100%; height: auto; display: block; }
+       .prediction-box {
+           background-color: #F8FAFC; border-left: 4px solid var(--soc-blue);
+           padding: 15px; border-radius: 4px; font-size: 13px; line-height: 1.6;
+           color: #475569; margin-bottom: 15px; flex-grow: 1; max-height: 450px; overflow-y: auto;
+       }
+       .history-box { max-height: 290px; overflow-y: auto; padding-right: 5px; }
+       .action-btn {
+           display: flex; align-items: center; justify-content: center; gap: 8px;
+           background-color: var(--ipn-guinda); color: white; text-decoration: none;
+           padding: 10px 12px; border-radius: 6px; margin-bottom: 10px; font-weight: 600; font-size: 12px;
+           transition: all 0.2s ease-in-out; box-shadow: 0 2px 5px rgba(123, 17, 58, 0.2);
+       }
+       .action-btn:hover { background-color: var(--ipn-guinda-dark); transform: translateY(-1px); }
+       .action-btn.secondary { background-color: var(--soc-blue); box-shadow: 0 2px 5px rgba(10, 25, 47, 0.2); }
+       .action-btn.secondary:hover { background-color: #132744; }
+       .desc-text { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4; }
+       .sys-info {
+           margin-top: auto; padding-top: 15px; border-top: 1px dashed #CBD5E1;
+           font-size: 11px; color: #888; text-align: center; line-height: 1.4;
+       }
+       @media (max-width: 1200px) { .container { grid-template-columns: 1fr; } }
+   </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="navbar-brand">
-            <h1>IPN — ESIME</h1>
-            <span>Centro de Operaciones de Seguridad (SOC) | CTI Portal</span>
-        </div>
-        <div class="navbar-badge">Motor Predictivo Activo</div>
-    </nav>
-    <div class="container">
-        <!-- COLUMNA 1: Grafica / Dashboard -->
-        <div class="card">
-            <div class="card-header">Tendencia Historica y Proyeccion Grafica</div>
-            <div class="dashboard-container">
-                <img src="estrategico/dashboard_predictivo.png" alt="Dashboard Predictivo CISA KEV" class="dashboard-img">
-            </div>
-            <div class="sys-info" style="margin-top: 15px;">Modelado estadistico ejecutado mediante Prophet (CISA KEV Dataset).</div>
-        </div>
-        <!-- COLUMNA 2: Analisis Predictivo de la IA -->
-        <div class="card">
-            <div class="card-header">Analisis Predictivo (Groq IA)</div>
-            <div class="section-title">Evaluacion de Amenazas</div>
-            <p class="desc-text">Interpretacion gerencial generada automaticamente por el modelo de lenguaje basada en el comportamiento mensual.</p>
-            <div class="prediction-box">
-                <strong>Fecha de Analisis: 20/09/2026 21:35</strong><br><br>• Analisis predictivo generado correctamente mediante Prophet y Groq IA.
-            </div>
-            <a href="estrategico/Boletin_Predictivo_Ejecutivo.pdf" target="_blank" class="action-btn">
-                Descargar Boletin Ejecutivo Completo
-            </a>
-        </div>
-        <!-- COLUMNA 3: Repositorio e Historial Tactico -->
-        <div class="card">
-            <div class="card-header">Repositorio Tactico</div>
-            <div class="section-title">Boletines por CVE</div>
-            <p class="desc-text">Historial de reportes operativos de vulnerabilidades activas.</p>
-            
-            <!-- Aqui se inyecta el aviso visual del reporte mas antiguo -->
-            
-    <div style="background-color: #E2E8F0; padding: 8px; border-radius: 4px; font-size: 11px; text-align: center; font-weight: 600; color: #334155; margin-bottom: 12px; border: 1px solid #CBD5E1;">
-        Registro historico mas antiguo: CVE-2008-0015
-    </div>
-    
-            
-            <div class="history-box">
-                
-                <a href="tacticos/Boletin_CVE_2026_9586.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-9586
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_9198.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-9198
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_9082.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-9082
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_87886.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-87886
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_87491.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-87491
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_86218.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-86218
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_86060.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-86060
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_85880.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-85880
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_85706.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-85706
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_85046.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-85046
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_84869.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-84869
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_8452.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-8452
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_8398.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-8398
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_83549.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-83549
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_83548.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-83548
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_82329.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-82329
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_82078.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-82078
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_81963.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-81963
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_81578.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-81578
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_8037.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-8037
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_76461.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-76461
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_76460.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-76460
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_75650.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-75650
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_7473.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-7473
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_73570.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-73570
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_72898.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-72898
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_72530.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-72530
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_72529.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-72529
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_6973.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-6973
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_68820.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-68820
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_67277.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-67277
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_66384.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-66384
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_65400.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-65400
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_64849.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-64849
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_63077.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-63077
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_63030.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-63030
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_60137.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-60137
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_60004.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-60004
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_59822.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-59822
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_59310.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-59310
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_58704.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-58704
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_58644.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-58644
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_56291.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-56291
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_56290.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-56290
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_56164.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-56164
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_56155.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-56155
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_55255.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-55255
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_55040.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-55040
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_54420.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-54420
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_53362.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-53362
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_53266.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-53266
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_5281.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-5281
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_50751.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-50751
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_50522.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-50522
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_49869.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-49869
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_48939.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-48939
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_48908.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-48908
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_48907.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-48907
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_48710.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-48710
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_48558.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-48558
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_48282.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-48282
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_48172.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-48172
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_48027.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-48027
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_46817.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-46817
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_45659.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-45659
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_45498.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-45498
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_45321.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-45321
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_45247.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-45247
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_42897.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-42897
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_42271.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-42271
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_42208.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-42208
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_42018.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-42018
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_42016.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-42016
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_41940.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-41940
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_41091.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-41091
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_39987.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-39987
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_39808.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-39808
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_3910.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-3910
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_3909.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-3909
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_35616.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-35616
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_35273.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-35273
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_3502.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-3502
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_34926.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-34926
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_34910.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-34910
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_34909.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-34909
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_34908.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-34908
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_34621.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-34621
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_34486.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-34486
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_34197.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-34197
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_33825.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-33825
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_33824.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-33824
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_33634.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-33634
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_33017.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-33017
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_32202.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-32202
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_32201.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-32201
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_31431.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-31431
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_3055.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-3055
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_28318.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-28318
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_25108.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-25108
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_25089.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-25089
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_24858.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-24858
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_24423.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-24423
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_2441.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-2441
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_24061.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-24061
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_23760.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-23760
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_22769.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-22769
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_22719.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-22719
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_21962.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-21962
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_21643.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-21643
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_21533.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-21533
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_21525.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-21525
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_21519.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-21519
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_21514.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-21514
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_21513.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-21513
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_21510.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-21510
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_21509.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-21509
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_21385.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-21385
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_20963.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-20963
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_20805.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-20805
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_20700.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-20700
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_20349.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-20349
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_20316.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-20316
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_20262.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-20262
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_20253.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-20253
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_20245.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-20245
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_20230.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-20230
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_20182.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-20182
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_20133.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-20133
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_20131.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-20131
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_20128.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-20128
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_20127.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-20127
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_20122.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-20122
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_20079.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-20079
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_20045.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-20045
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_19490.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-19490
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_18577.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-18577
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_18556.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-18556
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_1731.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-1731
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_16812.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-16812
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_16232.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-16232
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_1603.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-1603
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_15410.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-15410
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_15409.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-15409
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_1340.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-1340
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_1281.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-1281
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_12569.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-12569
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_11645.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-11645
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_10520.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-10520
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_0770.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-0770
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_0300.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-0300
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2026_0257.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2026-0257
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_8110.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-8110
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_68686.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-68686
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_68645.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-68645
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_68613.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-68613
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_68461.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-68461
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_67038.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-67038
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_66376.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-66376
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_64328.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-64328
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_62593.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-62593
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_60710.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-60710
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_54313.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-54313
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_54068.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-54068
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_53521.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-53521
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_52691.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-52691
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_49113.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-49113
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_48700.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-48700
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_48595.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-48595
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_47813.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-47813
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_43520.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-43520
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_43510.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-43510
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_40551.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-40551
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_40536.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-40536
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_39964.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-39964
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_39682.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-39682
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_37164.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-37164
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_34291.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-34291
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_34026.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-34026
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_32975.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-32975
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_32432.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-32432
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_31277.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-31277
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_31125.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-31125
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_29635.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-29635
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_2749.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-2749
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_26399.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-26399
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_25249.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-25249
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_15556.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-15556
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2025_11953.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2025-11953
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2024_7694.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2024-7694
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2024_7399.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2024-7399
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2024_57728.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2024-57728
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2024_57726.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2024-57726
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2024_43468.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2024-43468
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2024_37079.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2024-37079
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2024_27199.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2024-27199
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2024_21182.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2024-21182
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2024_1708.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2024-1708
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2023_49105.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2023-49105
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2023_4346.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2023-4346
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2023_43000.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2023-43000
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2023_41974.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2023-41974
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2023_36424.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2023-36424
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2023_27351.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2023-27351
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2023_21529.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2023-21529
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2022_20775.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2022-20775
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2022_0995.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2022-0995
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2022_0492.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2022-0492
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2021_39935.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2021-39935
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2021_30952.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2021-30952
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2021_27137.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2021-27137
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2021_23758.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2021-23758
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2021_22681.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2021-22681
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2021_22175.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2021-22175
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2021_22054.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2021-22054
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2020_9715.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2020-9715
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2020_7796.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2020-7796
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2019_19006.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2019-19006
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2019_1068.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2019-1068
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2018_14634.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2018-14634
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2017_7921.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2017-7921
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2015_5287.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2015-5287
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2015_3246.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2015-3246
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2012_1854.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2012-1854
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2010_0806.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2010-0806
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2010_0249.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2010-0249
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2009_3459.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2009-3459
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2009_1537.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2009-1537
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2009_0556.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2009-0556
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2009_0238.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2009-0238
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2008_4250.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2008-4250
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2008_4128.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2008-4128
-                </a>
-
-                <a href="tacticos/Boletin_CVE_2008_0015.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
-                    Reporte CVE-2008-0015
-                </a>
-
-            </div>
-            <div class="sys-info">
-                <strong>Institucion:</strong> IPN / ESIME<br>Sincronizacion Automatica Activa.
-            </div>
-        </div>
-    </div>
+   <nav class="navbar">
+       <div class="navbar-brand">
+           <h1>IPN — ESIME</h1>
+           <span>Centro de Operaciones de Seguridad (SOC) | CTI Portal</span>
+       </div>
+       <div class="navbar-badge">Motor Predictivo Activo</div>
+   </nav>
+   <div class="container">
+       <!-- COLUMNA 1: Grafica / Dashboard -->
+       <div class="card">
+           <div class="card-header">Tendencia Historica y Proyeccion Grafica</div>
+           <div class="dashboard-container">
+               <img src="estrategico/dashboard_predictivo.png" alt="Dashboard Predictivo CISA KEV" class="dashboard-img">
+           </div>
+           <div class="sys-info" style="margin-top: 15px;">Modelado estadistico ejecutado mediante Prophet (CISA KEV Dataset).</div>
+       </div>
+       <!-- COLUMNA 2: Analisis Predictivo de la IA -->
+       <div class="card">
+           <div class="card-header">Analisis Predictivo (Groq IA)</div>
+           <div class="section-title">Evaluacion de Amenazas</div>
+           <p class="desc-text">Interpretacion gerencial generada automaticamente por el modelo de lenguaje basada en el comportamiento mensual.</p>
+           <div class="prediction-box">
+               <strong>Fecha de Analisis: 20/09/2026 21:44</strong><br><br>• Analisis predictivo generado correctamente mediante Prophet y Groq IA.
+           </div>
+           <a href="estrategico/Boletin_Predictivo_Ejecutivo.pdf" target="_blank" class="action-btn">
+               Descargar Boletin Ejecutivo Completo
+           </a>
+       </div>
+       <!-- COLUMNA 3: Repositorio e Historial Tactico -->
+       <div class="card">
+           <div class="card-header">Repositorio Tactico</div>
+           <div class="section-title">Boletines por CVE</div>
+           <p class="desc-text">Historial de reportes operativos de vulnerabilidades activas.</p>
+           
+           <!-- AQUI SE INYECTAN LOS AVISOS DEL MAS RECIENTE Y MAS ANTIGUO -->
+           
+   <div style="background-color: #e0f2fe; padding: 8px; border-radius: 4px; font-size: 11px; text-align: center; font-weight: 600; color: #0369a1; margin-bottom: 8px; border: 1px solid #bae6fd;">
+       Alerta mas reciente: CVE-2026-9586
+   </div>
+   <div style="background-color: #E2E8F0; padding: 8px; border-radius: 4px; font-size: 11px; text-align: center; font-weight: 600; color: #334155; margin-bottom: 15px; border: 1px solid #CBD5E1;">
+       Registro mas antiguo: CVE-2008-0015
+   </div>
+   
+           
+           <div class="history-box">
+               
+               <a href="tacticos/Boletin_CVE_2026_9586.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-9586
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_9198.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-9198
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_9082.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-9082
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_87886.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-87886
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_87491.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-87491
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_86218.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-86218
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_86060.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-86060
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_85880.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-85880
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_85706.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-85706
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_85046.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-85046
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_84869.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-84869
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_8452.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-8452
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_8398.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-8398
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_83549.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-83549
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_83548.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-83548
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_82329.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-82329
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_82078.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-82078
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_81963.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-81963
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_81578.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-81578
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_8037.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-8037
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_76461.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-76461
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_76460.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-76460
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_75650.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-75650
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_7473.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-7473
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_73570.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-73570
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_72898.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-72898
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_72530.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-72530
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_72529.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-72529
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_6973.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-6973
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_68820.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-68820
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_67277.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-67277
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_66384.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-66384
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_65400.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-65400
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_64849.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-64849
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_63077.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-63077
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_63030.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-63030
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_60137.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-60137
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_60004.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-60004
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_59822.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-59822
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_59310.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-59310
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_58704.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-58704
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_58644.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-58644
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_56291.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-56291
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_56290.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-56290
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_56164.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-56164
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_56155.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-56155
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_55255.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-55255
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_55040.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-55040
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_54420.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-54420
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_53362.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-53362
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_53266.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-53266
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_5281.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-5281
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_50751.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-50751
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_50522.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-50522
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_49869.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-49869
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_48939.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-48939
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_48908.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-48908
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_48907.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-48907
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_48710.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-48710
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_48558.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-48558
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_48282.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-48282
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_48172.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-48172
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_48027.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-48027
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_46817.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-46817
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_45659.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-45659
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_45498.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-45498
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_45321.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-45321
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_45247.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-45247
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_42897.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-42897
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_42271.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-42271
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_42208.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-42208
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_42018.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-42018
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_42016.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-42016
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_41940.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-41940
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_41091.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-41091
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_39987.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-39987
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_39808.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-39808
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_3910.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-3910
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_3909.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-3909
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_35616.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-35616
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_35273.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-35273
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_3502.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-3502
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_34926.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-34926
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_34910.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-34910
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_34909.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-34909
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_34908.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-34908
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_34621.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-34621
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_34486.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-34486
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_34197.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-34197
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_33825.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-33825
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_33824.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-33824
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_33634.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-33634
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_33017.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-33017
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_32202.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-32202
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_32201.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-32201
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_31431.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-31431
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_3055.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-3055
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_28318.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-28318
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_25108.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-25108
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_25089.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-25089
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_24858.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-24858
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_24423.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-24423
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_2441.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-2441
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_24061.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-24061
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_23760.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-23760
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_22769.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-22769
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_22719.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-22719
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_21962.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-21962
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_21643.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-21643
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_21533.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-21533
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_21525.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-21525
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_21519.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-21519
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_21514.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-21514
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_21513.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-21513
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_21510.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-21510
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_21509.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-21509
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_21385.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-21385
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_20963.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-20963
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_20805.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-20805
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_20700.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-20700
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_20349.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-20349
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_20316.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-20316
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_20262.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-20262
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_20253.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-20253
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_20245.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-20245
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_20230.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-20230
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_20182.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-20182
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_20133.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-20133
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_20131.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-20131
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_20128.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-20128
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_20127.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-20127
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_20122.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-20122
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_20079.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-20079
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_20045.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-20045
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_19490.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-19490
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_18577.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-18577
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_18556.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-18556
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_1731.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-1731
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_16812.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-16812
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_16232.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-16232
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_1603.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-1603
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_15410.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-15410
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_15409.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-15409
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_1340.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-1340
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_1281.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-1281
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_12569.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-12569
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_11645.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-11645
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_10520.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-10520
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_0770.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-0770
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_0300.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-0300
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2026_0257.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2026-0257
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_8110.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-8110
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_68686.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-68686
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_68645.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-68645
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_68613.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-68613
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_68461.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-68461
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_67038.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-67038
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_66376.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-66376
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_64328.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-64328
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_62593.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-62593
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_60710.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-60710
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_54313.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-54313
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_54068.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-54068
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_53521.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-53521
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_52691.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-52691
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_49113.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-49113
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_48700.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-48700
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_48595.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-48595
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_47813.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-47813
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_43520.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-43520
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_43510.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-43510
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_40551.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-40551
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_40536.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-40536
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_39964.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-39964
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_39682.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-39682
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_37164.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-37164
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_34291.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-34291
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_34026.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-34026
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_32975.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-32975
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_32432.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-32432
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_31277.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-31277
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_31125.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-31125
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_29635.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-29635
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_2749.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-2749
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_26399.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-26399
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_25249.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-25249
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_15556.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-15556
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2025_11953.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2025-11953
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2024_7694.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2024-7694
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2024_7399.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2024-7399
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2024_57728.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2024-57728
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2024_57726.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2024-57726
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2024_43468.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2024-43468
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2024_37079.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2024-37079
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2024_27199.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2024-27199
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2024_21182.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2024-21182
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2024_1708.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2024-1708
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2023_49105.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2023-49105
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2023_4346.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2023-4346
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2023_43000.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2023-43000
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2023_41974.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2023-41974
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2023_36424.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2023-36424
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2023_27351.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2023-27351
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2023_21529.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2023-21529
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2022_20775.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2022-20775
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2022_0995.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2022-0995
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2022_0492.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2022-0492
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2021_39935.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2021-39935
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2021_30952.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2021-30952
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2021_27137.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2021-27137
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2021_23758.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2021-23758
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2021_22681.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2021-22681
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2021_22175.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2021-22175
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2021_22054.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2021-22054
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2020_9715.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2020-9715
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2020_7796.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2020-7796
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2019_19006.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2019-19006
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2019_1068.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2019-1068
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2018_14634.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2018-14634
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2017_7921.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2017-7921
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2015_5287.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2015-5287
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2015_3246.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2015-3246
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2012_1854.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2012-1854
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2010_0806.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2010-0806
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2010_0249.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2010-0249
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2009_3459.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2009-3459
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2009_1537.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2009-1537
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2009_0556.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2009-0556
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2009_0238.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2009-0238
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2008_4250.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2008-4250
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2008_4128.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2008-4128
+               </a>
+
+               <a href="tacticos/Boletin_CVE_2008_0015.pdf" target="_blank" class="action-btn secondary" style="margin-bottom: 8px; font-size: 12px;">
+                   Reporte CVE-2008-0015
+               </a>
+
+           </div>
+           <div class="sys-info">
+               <strong>Institucion:</strong> IPN / ESIME<br>Sincronizacion Automatica Activa.
+           </div>
+       </div>
+   </div>
 </body>
 </html>
